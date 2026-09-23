@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Goal Game - Expanded Capstone OER Demo</title>
+    <style>
+        :root {
+            --primary: #003366;
+            --secondary: #008080;
+            --accent: #f39c12;
+            --bg: #f4f7f6;
+            --card-bg: #ffffff;
+            --text: #333333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            width: 100%;
+            max-width: 800px;
+            background-color: var(--primary);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 20px;
+            font-weight: bold;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 12px;
+            border-radius: 20px;
+        }
+
+        main {
+            width: 100%;
+            max-width: 800px;
+            margin-top: 20px;
+        }
+
+        .phase-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .phase-card.active {
+            display: block;
+        }
+
+        button {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background-color: #005656;
+        }
+
+        .btn-nav {
+            background-color: #555;
+            padding: 8px 14px;
+            font-size: 0.9rem;
+        }
+
+        .btn-nav:hover {
+            background-color: #333;
+        }
+
+        .btn-option {
+            display: block;
+            width: 100%;
+            text-align: left;
+            margin: 10px 0;
+            background: #eef2f5;
+            color: #333;
+            border: 1px solid #ccc;
+        }
+
+        .btn-option:hover {
+            background: #dce4ec;
+        }
+
+        .feedback-box {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 5px;
+            background-color: #e8f4f8;
+            border-left: 5px solid var(--secondary);
+            display: none;
+        }
+
+        .chat-box {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            height: 200px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 60px;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+
+        .badge-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .badge {
+            background: var(--accent);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div>
+        <h2 style="margin:0;">The Goal Game</h2>
+        <small>Casa Thomas Jefferson Professional Development</small>
+    </div>
+    <div class="stats-bar">
+        <div class="stat-item">🪙 Coins: <span id="coin-count">0</span></div>
+        <div class="stat-item">📍 Phase: <span id="phase-num">1</span>/5</div>
+    </div>
+</header>
+
+<main>
+    <!-- Phase 1: Concept Exploration (20 Cards) -->
+    <section id="phase1" class="phase-card active">
+        <h3>Phase 1: Concept Exploration</h3>
+        <p>Explore the 20 core criteria cards for writing effective, language-focused lesson goals.</p>
+        
+        <div style="border: 2px dashed var(--secondary); padding: 25px; text-align: center; border-radius: 8px; background: #fafafa;">
+            <h4 id="card-title" style="color: var(--primary); margin-top:0;">Concept Card 1 of 20</h4>
+            <p id="card-desc" style="font-size: 1.1rem; line-height: 1.5;"></p>
+        </div>
+
+        <div class="nav-row">
+            <button class="btn-nav" onclick="prevCard()">◄ Previous Card</button>
+            <span style="font-size: 0.9rem; color: #666;">Flown Cards Earn Coins!</span>
+            <button class="btn-nav" onclick="nextCard()">Next Card ►</button>
+        </div>
+
+        <div id="p1-action" style="margin-top: 20px; text-align: center;">
+            <button onclick="nextPhase(2)" style="background: var(--accent);">Claim Phase 1 Coins & Advance to Phase 2 ➔</button>
+        </div>
+    </section>
+
+    <!-- Phase 2: Objective Discrimination (20 Goals) -->
+    <section id="phase2" class="phase-card">
+        <h3>Phase 2: Objective Discrimination</h3>
+        <p><b id="p2-counter">Goal 1 of 20:</b> Evaluate the sample objective below:</p>
+        
+        <blockquote id="p2-goal-text" style="background: #eee; padding: 15px; border-left: 5px solid var(--primary); font-size: 1.05rem;">
+            Loading goal...
+        </blockquote>
+
+        <button class="btn-option" onclick="evaluateGoal(false)">⚠️ Missing Something</button>
+        <button class="btn-option" onclick="evaluateGoal(true)">✅ Effective Objective</button>
+
+        <div id="p2-feedback" class="feedback-box">
+            <b>Feedback:</b> <span id="p2-text"></span>
+            <div style="margin-top: 15px; text-align: right;">
+                <button id="p2-next-btn" onclick="nextP2Goal()">Next Goal ➔</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Phase 3: Smart AI Pedagogical Coach Rewriting -->
+    <section id="phase3" class="phase-card">
+        <h3>Phase 3: Iterative AI Goal Rewriting</h3>
+        <p><b id="p3-counter">Rewrite Task 1 of 10:</b> Transform this flawed objective into a SMART, language-focused outcome.</p>
+        
+        <blockquote id="p3-flawed-goal" style="background: #fff3cd; padding: 12px; border-left: 5px solid #ffc107; font-weight: bold;">
+            Loading flawed goal...
+        </blockquote>
+
+        <div class="chat-box" id="ai-chat">
+            <p><b>AI Coach:</b> Here is flawed goal #1. How would you rewrite it to be specific, measurable, and language-focused?</p>
+        </div>
+
+        <textarea id="p3-input" placeholder="Type your improved objective here..."></textarea>
+        
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <button id="p3-submit-btn" onclick="sendAIFeedback()">Submit to AI Coach</button>
+            <button id="p3-next-btn" onclick="nextP3Goal()" style="background: var(--accent); display: none;">Next Rewrite Challenge ➔</button>
+        </div>
+
+        <div id="p3-action" style="margin-top: 15px; display: none; text-align: center;">
+            <button onclick="nextPhase(4)" style="background: var(--accent); font-size: 1.1rem;">Claim Phase 3 Coins & Advance to Phase 4 ➔</button>
+        </div>
+    </section>
+
+    <!-- Phase 4: Contextualized Application -->
+    <section id="phase4" class="phase-card">
+        <h3>Phase 4: Authentic Application</h3>
+        <p>Draft an objective for your real upcoming class at Casa Thomas Jefferson:</p>
+        <label for="course-select"><b>Select Course Branch & Level:</b></label>
+        <select id="course-select" style="width: 100%; padding: 8px; margin: 10px 0;">
+            <option>Teens 3 (Brasilia Branch)</option>
+            <option>Adults Advanced (Goiania Branch)</option>
+            <option>Kids 2 (Uberlandia Branch)</option>
+            <option>B2 Upper-Intermediate (Brasilia Branch)</option>
+        </select>
+        <textarea id="p4-input" placeholder="Write your authentic objective..."></textarea>
+        <button onclick="submitAuthenticGoal()">Submit to Institutional Goal Bank</button>
+        <div id="p4-action" style="margin-top: 15px; display: none;">
+            <button onclick="nextPhase(5)">Claim 15 Coins & Advance to Phase 5 ➔</button>
+        </div>
+    </section>
+
+    <!-- Phase 5: Peer Review & Rewards -->
+    <section id="phase5" class="phase-card">
+        <h3>Phase 5: Collaborative Peer Review</h3>
+        <p>Review a goal submitted by a colleague from another branch:</p>
+        <blockquote style="background: #eee; padding: 10px; border-left: 4px solid var(--accent);">
+            <b>Colleague's Goal (Uberlandia):</b> "Students will be able to orally justify their opinion on environmental solutions using modal verbs in pairs."
+        </blockquote>
+        <textarea id="p5-input" placeholder="Use conversational moves: Ask a question, make a comment, or offer a suggestion..."></textarea>
+        <button onclick="finishGame()">Route Peer Feedback via Email & Complete</button>
+
+        <div id="game-complete" style="display: none; margin-top: 20px; text-align: center;">
+            <h2 style="color: var(--secondary);">🎉 Module Completed!</h2>
+            <p>Your peer feedback has been dispatched. You earned a total of <b id="final-coins">0</b> coins!</p>
+            <div class="badge-container" style="justify-content: center;">
+                <div class="badge">🏆 Measurable Objective Specialist</div>
+                <div class="badge">🌟 Scaffolding Master</div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+    let coins = 0;
+
+    // 20 Concept Cards
+    const conceptCards = [
+        { title: "Language-Focused", desc: "Objectives specify the exact target language (vocabulary, structures, or functions) students will use." },
+        { title: "Student-Centered", desc: "Formulated around what the *learner* will perform, not what the teacher will teach or execute." },
+        { title: "Observable Action", desc: "Uses active verbs (e.g., 'produce', 'identify', 'negotiate') rather than passive states (e.g., 'understand', 'know')." },
+        { title: "Contextualized", desc: "Anchored in a realistic communicative context or meaningful task relevant to real-life usage." },
+        { title: "Measurable Criteria", desc: "Includes explicit parameters for success (e.g., 'using at least three adverbs of frequency')." },
+        { title: "Realistic & Achievable", desc: "Designed appropriately for the proficiency level (e.g., A2 vs C1) and lesson duration." },
+        { title: "Scaffolded Integration", desc: "Connects target linguistic items with supporting tasks (e.g., listening before speaking)." },
+        { title: "Distinction: Outcome vs. Activity", desc: "'Completing page 10' is an activity. 'Orally negotiating a compromise' is an outcome." },
+        { title: "Functional Purpose", desc: "Clearly indicates *why* language is being used (e.g., 'to persuade a colleague')." },
+        { title: "SMART Framework Alignment", desc: "Specific, Measurable, Achievable, Relevant, and Time-Bound in daily planning." },
+        { title: "Productive Skill Focus", desc: "Explicitly identifies output expectations in speaking or writing activities." },
+        { title: "Receptive Skill Focus", desc: "Defines specific strategies for listening or reading (e.g., 'scanning for key statistics')." },
+        { title: "Differentiating Target Language", desc: "Separates core targeted structures from secondary or incidental vocabulary." },
+        { title: "Form-Meaning Connection", desc: "Ensures students practice grammar structures within authentic communicative intent." },
+        { title: "Peer Collaboration Support", desc: "Incorporates interaction formats (e.g., 'in trios', 'during a gallery walk')." },
+        { title: "Formative Assessment Alignment", desc: "Allows teachers to instantly verify objective achievement during class monitoring." },
+        { title: "Clear Performance Conditions", desc: "States resources available during the task (e.g., 'using a visual mind map')." },
+        { title: "Reducing Cognitive Load", desc: "Keeps objectives focused on 1–2 primary learning targets per lesson block." },
+        { title: "Institutional Curriculum Alignment", desc: "Directly maps daily targets to course syllabi and macro-level outcomes." },
+        { title: "Reflective Self-Assessment", desc: "Enables learners to evaluate their own progress against the stated objective." }
+    ];
+
+    // 20 Sample Goals with Feedback
+    const sampleGoals = [
+        { goal: "Students will practice present perfect tense by reading page 42.", effective: false, feedback: "'Reading page 42' is an activity, not a measurable learning outcome. It lacks specific language performance parameters." },
+        { goal: "By the end of the lesson, students will be able to orally state three restaurant recommendations using 'should' and 'could' in pair dialogues.", effective: true, feedback: "Excellent! Student-centered, specific language target ('should/could'), observable ('orally state'), and contextualized." },
+        { goal: "Teacher will explain the difference between simple past and past continuous.", effective: false, feedback: "Teacher-centered! Objectives must state what *learners* will do, not what the teacher will present." },
+        { goal: "Students will understand the concept of modal verbs.", effective: false, feedback: "'Understand' is not directly observable. Replace it with an action verb like 'identify', 'apply', or 'write'." },
+        { goal: "Learners will write a 4-sentence email requesting a refund using formal polite expressions (e.g., 'I would appreciate...').", effective: true, feedback: "Effective! Clear target language, measurable product (4-sentence email), and realistic context." },
+        { goal: "Students will watch a 5-minute video clip about climate change.", effective: false, feedback: "This describes media consumption, not a learning outcome. What language skill will students demonstrate after watching?" },
+        { goal: "Learners will scan a travel blog to identify 5 adjectives describing holiday destinations.", effective: true, feedback: "Effective! Focuses on a receptive reading strategy (scanning) with a measurable product (5 adjectives)." },
+        { goal: "Students will know how to use first conditional sentences correctly.", effective: false, feedback: "'Know' is vague. Specify how students will demonstrate this knowledge (e.g., 'by creating conditional promises')." },
+        { goal: "Learners will debate pros and cons of remote work in groups of 3, using contrast linkers ('however', 'on the other hand').", effective: true, feedback: "Great objective! Clear communicative task (debate), explicit interaction pattern, and target functional language." },
+        { goal: "Students will complete exercises 1 through 5 in the workbook.", effective: false, feedback: "Completing exercises is a task, not an objective. State the language mastery demonstrated by those exercises." },
+        { goal: "Learners will orally negotiate a weekend schedule with a partner using future plans ('going to' / 'planning to').", effective: true, feedback: "Effective! Actionable, communicative, and directly targets specific future structures." },
+        { goal: "Students will play a vocabulary review game on Kahoot.", effective: false, feedback: "Playing a game is an activity. What specific vocabulary items are being assessed or consolidated?" },
+        { goal: "Learners will summarize a short news article in 3 sentences using past passive voice.", effective: true, feedback: "Strong objective! Specific constraints (3 sentences), observable writing output, and clear grammar target." },
+        { goal: "Students will learn 10 new words about technology.", effective: false, feedback: "'Learn' is broad. Will they define them, use them in sentences, or categorize them?" },
+        { goal: "Learners will pronounce words ending in '-ed' with 80% accuracy during a story-retelling activity.", effective: true, feedback: "Excellent phonological target with clear performance parameters and communicative context." },
+        { goal: "Students will improve their listening skills.", effective: false, feedback: "Too generic. Specify the listening sub-skill (e.g., listening for gist, listening for specific numbers)." },
+        { goal: "Learners will ask and answer 4 peer survey questions about daily routines using simple present frequency adverbs.", effective: true, feedback: "Well-crafted! Clear functional purpose, specific structural focus, and interactive setup." },
+        { goal: "Students will review chapter 3 grammar points.", effective: false, feedback: "Reviewing is a procedure. What will students produce to show mastery of Chapter 3 points?" },
+        { goal: "Learners will draft a 100-word job application cover letter including 3 action verbs in the simple past.", effective: true, feedback: "Effective! Contextualized authentic task with specific quantitative and structural constraints." },
+        { goal: "Students will enjoy reading an authentic English short story.", effective: false, feedback: "Enjoyment is an affective goal, not an observable language outcome. State how comprehension will be demonstrated." }
+    ];
+
+    // Filter "Missing Something" goals for Phase 3
+    const flawedGoals = sampleGoals.filter(item => item.effective === false);
+
+    let currentCardIndex = 0;
+    let currentGoalIndex = 0;
+    let currentP3Index = 0;
+
+    window.onload = function() {
+        displayCard();
+        displayGoal();
+        displayP3Task();
+    };
+
+    function addCoins(amount) {
+        coins += amount;
+        document.getElementById('coin-count').innerText = coins;
+    }
+
+    // Phase 1 Card Navigation
+    function displayCard() {
+        document.getElementById('card-title').innerText = `Concept Card ${currentCardIndex + 1} of ${conceptCards.length}: ${conceptCards[currentCardIndex].title}`;
+        document.getElementById('card-desc').innerHTML = conceptCards[currentCardIndex].desc;
+    }
+
+    function nextCard() {
+        if (currentCardIndex < conceptCards.length - 1) {
+            currentCardIndex++;
+            displayCard();
+            addCoins(1);
+        }
+    }
+
+    function prevCard() {
+        if (currentCardIndex > 0) {
+            currentCardIndex--;
+            displayCard();
+        }
+    }
+
+    // Phase 2 Goal Navigation
+    function displayGoal() {
+        const item = sampleGoals[currentGoalIndex];
+        document.getElementById('p2-counter').innerText = `Goal ${currentGoalIndex + 1} of ${sampleGoals.length}:`;
+        document.getElementById('p2-goal-text').innerText = `"${item.goal}"`;
+        document.getElementById('p2-feedback').style.display = 'none';
+    }
+
+    function evaluateGoal(userChoice) {
+        const item = sampleGoals[currentGoalIndex];
+        const feedbackBox = document.getElementById('p2-feedback');
+        const textSpan = document.getElementById('p2-text');
+        
+        feedbackBox.style.display = 'block';
+
+        if (userChoice === item.effective) {
+            textSpan.innerHTML = `<span style='color: green;'><b>Correct!</b></span> ${item.feedback}`;
+            addCoins(2);
+        } else {
+            textSpan.innerHTML = `<span style='color: red;'><b>Not quite.</b></span> ${item.feedback}`;
+        }
+    }
+
+    function nextP2Goal() {
+        if (currentGoalIndex < sampleGoals.length - 1) {
+            currentGoalIndex++;
+            displayGoal();
+        } else {
+            alert("All 20 goals evaluated! Advancing to Phase 3.");
+            nextPhase(3);
+        }
+    }
+
+    // Phase 3 AI Coach Engine
+    function displayP3Task() {
+        const item = flawedGoals[currentP3Index];
+        document.getElementById('p3-counter').innerText = `Rewrite Task ${currentP3Index + 1} of ${flawedGoals.length}:`;
+        document.getElementById('p3-flawed-goal').innerText = `"${item.goal}"`;
+        document.getElementById('p3-input').value = "";
+        document.getElementById('p3-next-btn').style.display = 'none';
+        
+        const chat = document.getElementById('ai-chat');
+        chat.innerHTML = `<p><b>AI Coach:</b> Here is flawed goal #currentP3Index+1:<i>"{item.goal}"</i>. How would you rewrite it to be specific, measurable, and language-focused?</p>`;
+    }
+
+    function sendAIFeedback() {
+        const input = document.getElementById('p3-input').value.trim();
+        const chat = document.getElementById('ai-chat');
+
+        if (!input) return;
+
+        chat.innerHTML += `<p><b>You:</b> ${input}</p>`;
+
+        const lowerInput = input.toLowerCase();
+
+        // 1. Check for unobservable passive verbs
+        const weakVerbs = ['learn', 'know', 'understand', 'practice', 'study', 'enjoy', 'review', 'watch'];
+        const hasWeakVerb = weakVerbs.some(v => lowerInput.includes(`will ${v}`) || lowerInput.includes(`to ${v}`));
+
+        // 2. Check for active/observable outcome verbs
+        const actionVerbs = ['write', 'speak', 'oral', 'state', 'create', 'draft', 'negotiate', 'identify', 'list', 'describe', 'summarize', 'ask', 'answer', 'produce'];
+        const hasActionVerb = actionVerbs.some(v => lowerInput.includes(v));
+
+        let coachFeedback = "";
+        let isPassed = false;
+
+        if (hasWeakVerb) {
+            coachFeedback = `<span style='color: #c0392b;'><b>Needs Improvement:</b></span> Your rewrite uses vague verbs (like <i>learn, know, understand, or practice</i>). These are not directly observable! Try using an active verb like <i>'write', 'orally produce', 'identify', or 'negotiate'</i>.`;
+        } else if (!hasActionVerb) {
+            coachFeedback = `<span style='color: #d35400;'><b>Almost there!</b></span> State explicitly what product or speech act the students will output (e.g., <i>'write a 3-sentence email'</i> or <i>'orally state 3 opinions'</i>).`;
+        } else {
+            coachFeedback = `<span style='color: green;'><b>Excellent Revision! 🎉</b></span> You converted the flawed task into an active, observable outcome with a clear language focus.`;
+            isPassed = true;
+        }
+
+        chat.innerHTML += `<p><b>AI Coach:</b> ${coachFeedback}</p>`;
+        chat.scrollTop = chat.scrollHeight;
+
+        if (isPassed) {
+            addCoins(3);
+            if (currentP3Index < flawedGoals.length - 1) {
+                document.getElementById('p3-next-btn').style.display = 'inline-block';
+            } else {
+                document.getElementById('p3-action').style.display = 'block';
+            }
+        }
+    }
+
+    function nextP3Goal() {
+        if (currentP3Index < flawedGoals.length - 1) {
+            currentP3Index++;
+            displayP3Task();
+        }
+    }
+
+    function nextPhase(phaseNum) {
+        document.querySelectorAll('.phase-card').forEach(card => card.classList.remove('active'));
+        document.getElementById('phase' + phaseNum).classList.add('active');
+        document.getElementById('phase-num').innerText = phaseNum;
+    }
+
+    function submitAuthenticGoal() {
+        alert("Goal indexed into the Casa Thomas Jefferson Centralized Matrix!");
+        document.getElementById('p4-action').style.display = 'block';
+    }
+
+    function finishGame() {
+        document.getElementById('p5-input').style.display = 'none';
+        document.getElementById('game-complete').style.display = 'block';
+        document.getElementById('final-coins').innerText = coins;
+    }
+</script>
+
+</body>
+</html>
+
